@@ -1,0 +1,19 @@
+{
+  "check-coverage": true,
+  "extension": [".js"],
+  "exclude": [
+    "test",
+    "lib/**/*-test.js"
+  ],
+  "statements": 50,
+  "branches": 50,
+  "functions": 50,
+  "lines": 50,
+  "reporter": ["lcov", "html", "text", "text-summary"],
+  "watermarks": {
+    "lines": [50, 99],
+    "functions": [50, 99],
+    "branches": [50, 99],
+    "statements": [50, 99]
+  }
+}
