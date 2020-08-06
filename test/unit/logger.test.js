@@ -11,7 +11,7 @@ describe('testes unitario logger.js', () => {
     assert.isNotNull(loggerResult);
     assert.isTrue(loggerWinstonSpy.calledOnce, 'Deve ser chamado apenas uma vez');
   });
-  it('Deve imprimir dados formatados para stdout (integer value)', () => {
+  it.skip('Deve imprimir dados formatados para stdout (integer value)', () => {
     const loggerResult = require('../../lib/utils/logger');
     loggerResult.on('data', (data) => {
       assert.strictEqual(data.level, 'info');

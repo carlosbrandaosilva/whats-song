@@ -1,7 +1,56 @@
-version: 2.1
-orbs:
-  node: circleci/node@3.0.0
+defaults: &defaults
+  working_directory: ~/build
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    docker:
+      - image: circleci/node@3.0.0
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASSWORD
+        environment:
+          TEST_REPORT_PATH: reports/npm-test.txt
+      - image: mongo:4.0
+
+    steps:
+      - checkout
+
+      - setup_remote_docker:
+          version: 18.05.0-ce
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Installing NPM Modules
+          command: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Executing Tests
+          command: |
+            mkdir reports
+            npm test | tee ${TEST_REPORT_PATH}
+            cp -r coverage/ reports/
+
+      - run:
+          name: Building and Publishing Image
+          command: |
+            bash /publish-docker-image.sh
+
+      - store_artifacts:
+          path: reports
+
 workflows:
-  node-tests:
+  version: 2
+  automated-deploy-process:
     jobs:
-      - node/test
+      - build:
+          context: brandao

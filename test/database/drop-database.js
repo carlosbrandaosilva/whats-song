@@ -2,7 +2,8 @@ const mongo = require('mongodb').MongoClient;
 
 const dropModule = (() => {
   const dropDatabase = async () => {
-    const client = await mongo.connect("mongodb://localhost:27017", {
+    const mongodbUri = process.env.MONGO_URL_TEST;
+    const client = await mongo.connect(mongodbUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
