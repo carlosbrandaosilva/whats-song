@@ -6,7 +6,7 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: node@3.0.0
+      - image: node:12.18.3
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASSWORD
