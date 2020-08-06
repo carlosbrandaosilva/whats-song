@@ -5,15 +5,15 @@
     "test",
     "lib/**/*-test.js"
   ],
-  "statements": 50,
-  "branches": 50,
-  "functions": 50,
-  "lines": 50,
+  "statements": 10,
+  "branches": 10,
+  "functions": 10,
+  "lines": 10,
   "reporter": ["lcov", "html", "text", "text-summary"],
   "watermarks": {
-    "lines": [50, 99],
-    "functions": [50, 99],
-    "branches": [50, 99],
-    "statements": [50, 99]
+    "lines": [10, 99],
+    "functions": [10, 99],
+    "branches": [10, 99],
+    "statements": [10, 99]
   }
 }

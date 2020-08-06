@@ -7,7 +7,7 @@
     "mocha": "mocha",
     "coverage": "nyc report",
     "test": "nyc --reporter=lcov mocha && npm run coverage",
-    "posttest": "nyc check-coverage --statements 50 --branches 50 --functions 50",
+    "posttest": "nyc check-coverage --statements 10 --branches 10 --functions 10",
     "start": "node index.js"
   },
   "author": "Carlos Lucas Brandão Silva",
