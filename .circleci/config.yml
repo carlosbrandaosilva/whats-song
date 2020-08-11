@@ -40,6 +40,17 @@ jobs:
             npm test | tee ${TEST_REPORT_PATH}
             cp -r coverage/ reports/
 
+      - run:
+          name: Building and Publishing Image
+          command: |
+            TAG=$(node -p -e "require('./package.json').version")            
+            docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+            echo "building image | tee $BUILD_REPORT_PATH
+            docker build -t lucasbrandao/whats-song:$TAG . | tee $BUILD_REPORT_PATH
+
+            echo "Image lucasbrandao/whats-song:$TAG published on docker hub!"
+
       - store_artifacts:
           path: reports
 
