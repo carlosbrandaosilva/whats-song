@@ -40,6 +40,7 @@ jobs:
           command: |
             TAG=$(node -p -e "require('./package.json').version")            
             docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
             echo "building image"
             docker build -t lucasbrandao/whats-song:$TAG ./ | tee $BUILD_REPORT_PATH
             echo "pushing image $IMAGE:$TAG" | tee $BUILD_REPORT_PATH
