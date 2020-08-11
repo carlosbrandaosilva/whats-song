@@ -47,7 +47,7 @@ jobs:
             docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
             echo "building image | tee $BUILD_REPORT_PATH
-            docker build -t lucasbrandao/whats-song:$TAG . | tee $BUILD_REPORT_PATH
+            docker build -t lucasbrandao/whats-song:$TAG ./
 
             echo "Image lucasbrandao/whats-song:$TAG published on docker hub!"
 
