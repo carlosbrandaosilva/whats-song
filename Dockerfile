@@ -1,5 +1,13 @@
 FROM node:12
 
-WORKDIR /usr/src/app
+WORKDIR /app/whats-song
 
-CMD ["start"]
+# COPY package*.json ./
+
+# RUN npm install
+
+# COPY . .
+
+# EXPOSE 8080
+
+CMD [ "node", "index.js" ]
