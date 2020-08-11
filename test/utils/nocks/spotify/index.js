@@ -23,5 +23,16 @@ module.exports = {
     return nock(url)
       .get(`/browse/categories/${options.categoryId}/playlists`)
       .reply(options.statusCode || 200, options.playlists || {});
+  },
+  getPlaylistTracks(options = {}) {
+    const url = options.url || process.env.SPOTIFY_URL_API
+    if (options.errorMessage) {
+      return nock(url)
+        .get(`/playlists/${options.playlistId}/tracks`)
+        .replyWithError(options.errorMessage);
+    }
+    return nock(url)
+      .get(`/playlists/${options.playlistId}/tracks`)
+      .reply(options.statusCode || 200, options.tracks || {});
   }
 };

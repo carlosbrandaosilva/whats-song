@@ -2,7 +2,7 @@ const Chance = require('chance');
 
 const chance = new Chance();
 
-const getPlaylistsByCategory = (data = {}) => {
+const create = (data = {}) => {
   const playlists = {
     playlists: {
       href: data.href || chance.url(),
@@ -55,5 +55,5 @@ const getPlaylistsByCategory = (data = {}) => {
 };
 
 module.exports = {
-  getPlaylistsByCategory
+  create
 };

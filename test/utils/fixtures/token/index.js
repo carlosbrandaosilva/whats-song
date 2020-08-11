@@ -2,7 +2,7 @@ const Chance = require('chance');
 
 const chance = new Chance();
 
-const getToken = (data = {}) => {
+const create = (data = {}) => {
   const token = {
     access_token: chance.hash(),
     token_type: 'Bearer',
@@ -13,5 +13,5 @@ const getToken = (data = {}) => {
 };
 
 module.exports = {
-  getToken
+  create
 };

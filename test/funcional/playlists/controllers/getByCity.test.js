@@ -6,7 +6,7 @@ const { repository: citiesRepository } = require('../../../../lib/cities')
 
 const instanceServer = new Server();
 
-describe('GET Categories: Testes funcionais ', () => {
+describe.only('GET Categories: Testes funcionais ', () => {
   let app;
   before(() => {
     instanceServer.defineConfig();
@@ -17,23 +17,30 @@ describe('GET Categories: Testes funcionais ', () => {
     nocks.cleanAll();    
   });
   describe('Casos de sucesso: Deve retornar, ', () => {
-    it.only('200, Get playlists por cidade de categoria pop retornadas com sucesso.', async () => {
-      const cityFixtures = fixtures.cities.getCity({ name: 'London' });
+    it('200, Get playlists por cidade de categoria rock retornadas com sucesso.', async () => {
+      const city = 'Belo Horizonte';
+      const cityFixtures = fixtures.cities.getCity({ name: city, externalId: 2643743 });
       await citiesRepository.insertOne(cityFixtures);
-      const categoryId = 'pop';
-      const city = 'london';
-      const playlistsFixtures = fixtures.playlists.getPlaylistsByCategory();
-      const tokenFixture = fixtures.token.getToken();
-      // const nockGetToken = nocks.spotify.getToken({ token: tokenFixture });
-      // const nockGetPlaylists = nocks.spotify.getPlaylistsByCategory(
-      //   { playlists: playlistsFixtures, categoryId }
-      // );
-      const playlistExpected = [
-        {
-          name: playlistsFixtures.playlists.items[0].name,
-          link: playlistsFixtures.playlists.items[0].external_urls.spotify
-        }
-      ];
+      const categoryId = 'rock';
+      const playlistsFixtures = fixtures.playlists.create();
+      const tokenFixture = fixtures.token.create();
+      const trackFixtures = fixtures.tracks.create();
+      const weatherDataFixtures = fixtures.weatherData.create();
+      const nockGetToken = nocks.spotify.getToken({ token: tokenFixture });
+      const nockGetPlaylists = nocks.spotify.getPlaylistsByCategory(
+        { playlists: playlistsFixtures, categoryId }
+      );
+      const [ playList ] = playlistsFixtures.playlists.items;
+      const nockGetPlaylistTracks = nocks.spotify.getPlaylistTracks(
+        { tracks: trackFixtures, playlistId: playList.id }
+      );
+      const nockGetWeatherData = nocks.openWeather.getWeatherData(
+        { cityId: cityFixtures.externalId, weatherData: weatherDataFixtures }
+      );
+      const playlistExpected = trackFixtures.items.map((item) => ({
+        name: item.track.name,
+        link: item.track.external_urls.spotify
+      }));
       const { statusCode, body } = await request(app)
         .get(`/cities/${city}/playlists`);
       
@@ -41,22 +48,135 @@ describe('GET Categories: Testes funcionais ', () => {
       assert.deepEqual(body, playlistExpected);
       assert.isTrue(nockGetToken.isDone());
       assert.isTrue(nockGetPlaylists.isDone());
+      assert.isTrue(nockGetPlaylistTracks.isDone());
+      assert.isTrue(nockGetWeatherData.isDone());
     });
-    it('200, Get playlists por cidade de categoria rock retornadas com sucesso.', async () => {
+    it('200, Get playlists por cidade de categoria pop retornadas com sucesso.', async () => {
+      const city = 'Belo Horizonte';
+      const cityFixtures = fixtures.cities.getCity({ name: city, externalId: 2643743 });
+      await citiesRepository.insertOne(cityFixtures);
+      const categoryId = 'pop';
+      const playlistsFixtures = fixtures.playlists.create();
+      const tokenFixture = fixtures.token.create();
+      const trackFixtures = fixtures.tracks.create();
+      const weatherDataFixtures = fixtures.weatherData.create({ temp: 26 });
+      const nockGetToken = nocks.spotify.getToken({ token: tokenFixture });
+      const nockGetPlaylists = nocks.spotify.getPlaylistsByCategory(
+        { playlists: playlistsFixtures, categoryId }
+      );
+      const [ playList ] = playlistsFixtures.playlists.items;
+      const nockGetPlaylistTracks = nocks.spotify.getPlaylistTracks(
+        { tracks: trackFixtures, playlistId: playList.id }
+      );
+      const nockGetWeatherData = nocks.openWeather.getWeatherData(
+        { cityId: cityFixtures.externalId, weatherData: weatherDataFixtures }
+      );
+      const playlistExpected = trackFixtures.items.map((item) => ({
+        name: item.track.name,
+        link: item.track.external_urls.spotify
+      }));
+      const { statusCode, body } = await request(app)
+        .get(`/cities/${city}/playlists`);
+      
+      assert.deepEqual(statusCode, 200);
+      assert.deepEqual(body, playlistExpected);
+      assert.isTrue(nockGetToken.isDone());
+      assert.isTrue(nockGetPlaylists.isDone());
+      assert.isTrue(nockGetPlaylistTracks.isDone());
+      assert.isTrue(nockGetWeatherData.isDone());
     });
     it('200, Get playlists por cidade de categoria classica retornadas com sucesso.', async () => {
-    });
-    it('200, Get playlists com nome da cidade não encontrado retornado playlists com sucesso baseado na cidade default.', async () => {      
-    });
-    it('204,', async () => {
+      const city = 'Belo Horizonte';
+      const cityFixtures = fixtures.cities.getCity({ name: city, externalId: 2643743 });
+      await citiesRepository.insertOne(cityFixtures);
+      const categoryId = 'classic';
+      const playlistsFixtures = fixtures.playlists.create();
+      const tokenFixture = fixtures.token.create();
+      const trackFixtures = fixtures.tracks.create();
+      const weatherDataFixtures = fixtures.weatherData.create({ temp: 3 });
+      const nockGetToken = nocks.spotify.getToken({ token: tokenFixture });
+      const nockGetPlaylists = nocks.spotify.getPlaylistsByCategory(
+        { playlists: playlistsFixtures, categoryId }
+      );
+      const [ playList ] = playlistsFixtures.playlists.items;
+      const nockGetPlaylistTracks = nocks.spotify.getPlaylistTracks(
+        { tracks: trackFixtures, playlistId: playList.id }
+      );
+      const nockGetWeatherData = nocks.openWeather.getWeatherData(
+        { cityId: cityFixtures.externalId, weatherData: weatherDataFixtures }
+      );
+      const playlistExpected = trackFixtures.items.map((item) => ({
+        name: item.track.name,
+        link: item.track.external_urls.spotify
+      }));
+      const { statusCode, body } = await request(app)
+        .get(`/cities/${city}/playlists`);
+      
+      assert.deepEqual(statusCode, 200);
+      assert.deepEqual(body, playlistExpected);
+      assert.isTrue(nockGetToken.isDone());
+      assert.isTrue(nockGetPlaylists.isDone());
+      assert.isTrue(nockGetPlaylistTracks.isDone());
+      assert.isTrue(nockGetWeatherData.isDone());
     });
   });
   describe('Casos de erro: Deve retornar, ', () => {
-    it('500, error ao chamar api do spotify getToken.', async () => {      
+    it('500, error ao chamar api do spotify getToken.', async () => {
+      const city = 'Belo Horizonte';
+      const cityFixtures = fixtures.cities.getCity({ name: city, externalId: 2643743 });
+      await citiesRepository.insertOne(cityFixtures);
+      const weatherDataFixtures = fixtures.weatherData.create({ temp: 3 });
+      const nockGetWeatherData = nocks.openWeather.getWeatherData(
+        { cityId: cityFixtures.externalId, weatherData: weatherDataFixtures }
+      );
+      const nockGetToken = nocks.spotify.getToken({ errorMessage: 'internalError' });      
+      const { statusCode, body } = await request(app)
+        .get(`/cities/${city}/playlists`);
+      
+      assert.deepEqual(statusCode, 500);
+      assert.isTrue(nockGetToken.isDone());
+      assert.isTrue(nockGetWeatherData.isDone());
     });
-    it('500, error ao chamar api de clima.', async () => {      
+    it('500, error ao chamar api de clima.', async () => {
+      const city = 'Belo Horizonte';
+      const cityFixtures = fixtures.cities.getCity({ name: city, externalId: 2643743 });
+      await citiesRepository.insertOne(cityFixtures);
+      const nockGetWeatherData = nocks.openWeather.getWeatherData(
+        { cityId: cityFixtures.externalId, errorMessage: 'internalError' }
+      );
+      const nockGetToken = nocks.spotify.getToken();      
+      const { statusCode, body } = await request(app)
+        .get(`/cities/${city}/playlists`);
+      
+      assert.deepEqual(statusCode, 500);
+      assert.isTrue(nockGetWeatherData.isDone());
+      assert.isFalse(nockGetToken.isDone());
     });
-    it('500, error ao chamar api do spotify getPlaylist.', async () => {      
+    it('500, error ao chamar api do spotify getPlaylist.', async () => {
+      const city = 'Belo Horizonte';
+      const cityFixtures = fixtures.cities.getCity({ name: city, externalId: 2643743 });
+      await citiesRepository.insertOne(cityFixtures);
+      const categoryId = 'classic';
+      const tokenFixture = fixtures.token.create();
+      const trackFixtures = fixtures.tracks.create();
+      const weatherDataFixtures = fixtures.weatherData.create({ temp: 3 });
+      const nockGetToken = nocks.spotify.getToken({ token: tokenFixture });
+      const nockGetWeatherData = nocks.openWeather.getWeatherData(
+        { cityId: cityFixtures.externalId, weatherData: weatherDataFixtures }
+      );
+      const nockGetPlaylists = nocks.spotify.getPlaylistsByCategory(
+        { errorMessage: 'internalError', categoryId }
+      );
+      const nockGetPlaylistTracks = nocks.spotify.getPlaylistTracks();
+
+      const { statusCode, body } = await request(app)
+        .get(`/cities/${city}/playlists`);
+      
+      assert.deepEqual(statusCode, 500);
+      assert.isTrue(nockGetToken.isDone());
+      assert.isTrue(nockGetPlaylists.isDone());      
+      assert.isTrue(nockGetWeatherData.isDone());
+      assert.isFalse(nockGetPlaylistTracks.isDone());
     });
   });
 });
