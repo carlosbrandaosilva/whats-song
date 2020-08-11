@@ -5,6 +5,7 @@ const { fixtures, nocks } = require('../../../utils');
 const { repository: citiesRepository } = require('../../../../lib/cities')
 
 const instanceServer = new Server();
+const token = 'senha';
 
 describe.only('GET Categories: Testes funcionais ', () => {
   let app;
@@ -42,7 +43,8 @@ describe.only('GET Categories: Testes funcionais ', () => {
         link: item.track.external_urls.spotify
       }));
       const { statusCode, body } = await request(app)
-        .get(`/cities/${city}/playlists`);
+        .get(`/cities/${city}/playlists`)
+        .set('authorization', `bearer ${token}`);
       
       assert.deepEqual(statusCode, 200);
       assert.deepEqual(body, playlistExpected);
@@ -76,7 +78,8 @@ describe.only('GET Categories: Testes funcionais ', () => {
         link: item.track.external_urls.spotify
       }));
       const { statusCode, body } = await request(app)
-        .get(`/cities/${city}/playlists`);
+        .get(`/cities/${city}/playlists`)
+        .set('authorization', `bearer ${token}`);
       
       assert.deepEqual(statusCode, 200);
       assert.deepEqual(body, playlistExpected);
@@ -89,7 +92,7 @@ describe.only('GET Categories: Testes funcionais ', () => {
       const city = 'Belo Horizonte';
       const cityFixtures = fixtures.cities.getCity({ name: city, externalId: 2643743 });
       await citiesRepository.insertOne(cityFixtures);
-      const categoryId = 'classic';
+      const categoryId = 'classical';
       const playlistsFixtures = fixtures.playlists.create();
       const tokenFixture = fixtures.token.create();
       const trackFixtures = fixtures.tracks.create();
@@ -110,7 +113,8 @@ describe.only('GET Categories: Testes funcionais ', () => {
         link: item.track.external_urls.spotify
       }));
       const { statusCode, body } = await request(app)
-        .get(`/cities/${city}/playlists`);
+        .get(`/cities/${city}/playlists`)
+        .set('authorization', `bearer ${token}`);
       
       assert.deepEqual(statusCode, 200);
       assert.deepEqual(body, playlistExpected);
@@ -131,7 +135,8 @@ describe.only('GET Categories: Testes funcionais ', () => {
       );
       const nockGetToken = nocks.spotify.getToken({ errorMessage: 'internalError' });      
       const { statusCode, body } = await request(app)
-        .get(`/cities/${city}/playlists`);
+        .get(`/cities/${city}/playlists`)
+        .set('authorization', `bearer ${token}`);
       
       assert.deepEqual(statusCode, 500);
       assert.isTrue(nockGetToken.isDone());
@@ -146,7 +151,8 @@ describe.only('GET Categories: Testes funcionais ', () => {
       );
       const nockGetToken = nocks.spotify.getToken();      
       const { statusCode, body } = await request(app)
-        .get(`/cities/${city}/playlists`);
+        .get(`/cities/${city}/playlists`)
+        .set('authorization', `bearer ${token}`);
       
       assert.deepEqual(statusCode, 500);
       assert.isTrue(nockGetWeatherData.isDone());
@@ -156,7 +162,7 @@ describe.only('GET Categories: Testes funcionais ', () => {
       const city = 'Belo Horizonte';
       const cityFixtures = fixtures.cities.getCity({ name: city, externalId: 2643743 });
       await citiesRepository.insertOne(cityFixtures);
-      const categoryId = 'classic';
+      const categoryId = 'classical';
       const tokenFixture = fixtures.token.create();
       const trackFixtures = fixtures.tracks.create();
       const weatherDataFixtures = fixtures.weatherData.create({ temp: 3 });
@@ -170,7 +176,8 @@ describe.only('GET Categories: Testes funcionais ', () => {
       const nockGetPlaylistTracks = nocks.spotify.getPlaylistTracks();
 
       const { statusCode, body } = await request(app)
-        .get(`/cities/${city}/playlists`);
+        .get(`/cities/${city}/playlists`)
+        .set('authorization', `bearer ${token}`);
       
       assert.deepEqual(statusCode, 500);
       assert.isTrue(nockGetToken.isDone());
