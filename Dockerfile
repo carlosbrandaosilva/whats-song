@@ -2,12 +2,10 @@ FROM node:12
 
 WORKDIR /app/whats-song
 
-# COPY package*.json ./
+COPY package*.json ./
 
-# RUN npm install
+RUN npm install
 
-# COPY . .
-
-# EXPOSE 8080
+COPY . .
 
 CMD [ "node", "index.js" ]
