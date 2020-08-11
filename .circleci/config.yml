@@ -20,10 +20,6 @@ jobs:
       - setup_remote_docker:
           version: 18.05.0-ce
 
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-
       - run:
           name: Installing NPM Modules
           command: npm install
