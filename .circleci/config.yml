@@ -44,7 +44,9 @@ jobs:
 
             echo "building image"
             docker build -t lucasbrandao/whats-song:$TAG ./ | tee $BUILD_REPORT_PATH
-
+            echo "pushing image $IMAGE:$TAG" | tee $BUILD_REPORT_PATH
+            
+            docker push lucasbrandao/whats-song:$TAG | tee -a $BUILD_REPORT_PATH
             echo "Image lucasbrandao/whats-song:$TAG published on docker hub!"
 
       - store_artifacts:
