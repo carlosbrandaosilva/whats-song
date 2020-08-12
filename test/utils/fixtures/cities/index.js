@@ -4,7 +4,7 @@ const chance = new Chance();
 
 const getCity = (data = {}) => {
   const city = {
-    externalId: data.externalId || chance.integer(),
+    id: data.id || chance.integer(),
     name: data.name || chance.word(),
     state: "",
     country: "PT",
